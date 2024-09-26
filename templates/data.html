@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            padding: 15px;
+            background: bisque;
+        }
+
+        .i1 {
+            border-radius: 5px;
+            margin-top: 5px;
+            text-align: start;
+            padding: 8px;
+            width: 92%;
+        }
+
+        .bhk {
+            margin-top: 10px;
+        }
+
+        input[type='radio'] {
+            visibility: hidden;
+
+        }
+
+        .radio-toolbar label {
+            display: inline-block;
+            background-color: #ddd;
+            padding: 10px 20px;
+            font-family: sans-serif, Arial;
+            font-size: 16px;
+            border: 2px solid #444;
+            border-radius: 4px;
+        }
+
+        .radio-toolbar label:hover {
+            background-color: #dfd;
+        }
+
+        .radio-toolbar input[type="radio"]:focus + label {
+            border: 2px dashed #444;
+        }
+
+        .radio-toolbar input[type="radio"]:checked + label {
+            background-color: #bfb;
+            border-color: #4c4;
+        }
+
+        .radio-toolbar input[type="radio"] {
+            opacity: 0;
+            position: fixed;
+            width: 0;
+        }
+
+        .loc {
+            margin-top: 10px;
+        }
+
+        .dropdown {
+            padding: 10px;
+            width: 100%;
+        }
+
+        .btn {
+            margin-top: 10px;
+            justify-content: center;
+        }
+        .esbtn{
+            margin-top: 30px;
+            padding: 10px;
+            margin-left: 90px;
+            background: #2166c8;
+            color: white;
+            border-radius: 5px;
+            border-color: #2166c8;
+        }
+
+        #price{
+            margin-left: 100px;
+            margin-top: 30px;
+        }
+
+    </style>
+</head>
+
+<body>
+<div class="back-img"></div>
+<div class="flex-container">
+    <form action="{% url 'index' %}" method="post">
+        {% csrf_token %}
+
+        <h3>Area(Square feets)</h3>
+        <input class="i1" name="sqft" placeholder="Enter Sqft: "/>
+
+        <div class="bhk radio-toolbar">
+            <h3>BHK</h3>
+            <input id="r1" name="uiBHK" type="radio" value="1"/>
+            <label for="r1">1</label>
+            <input id="r2" name="uiBHK" type="radio" value="2"/>
+            <label for="r2">2</label>
+            <input id="r3" name="uiBHK" type="radio" value="3"/>
+            <label for="r3">3</label>
+            <input id="r4" name="uiBHK" type="radio" value="4"/>
+            <label for="r4">4</label>
+            <input id="r5" name="uiBHK" type="radio" value="5"/>
+            <label for="r5">5</label>
+        </div>
+
+        <div class="radio-toolbar">
+            <h3>BATH</h3>
+            <input id="b1" name="uibath" type="radio" value="1"/>
+            <label for="b1">1</label>
+            <input id="b2" name="uibath" type="radio" value="2"/>
+            <label for="b2">2</label>
+            <input id="b3" name="uibath" type="radio" value="3"/>
+            <label for="b3">3</label>
+            <input id="b4" name="uibath" type="radio" value="4"/>
+            <label for="b4">4</label>
+            <input id="b5" name="uibath" type="radio" value="5"/>
+            <label for="b5">5</label>
+        </div>
+
+        <div class="loc">
+            <h2>Locations</h2>
+            <select class="dropdown" name="uilocations" id="uilocations">
+                <option value="" disabled="disabled" selected="selected">Choose location:</option>
+            </select>
+        </div>
+
+        <button class="btn btn-primary esbtn" type="submit">Estimate Price</button>
+        <div id="price"><h2>{{ predicted_price }} Lakh</h2></div>
+    </form>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        fetch('/get_location/')
+            .then(response => response.json())
+            .then(data => {
+                const locationSelect = document.getElementById('uilocations');
+                data.locations.forEach(location => {
+                    const option = document.createElement('option');
+                    option.value = location;
+                    option.text = location;
+                    locationSelect.appendChild(option);
+                });
+            });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+    fetch('/index/')
+        .then(response => response.json())
+        .then(data => {
+            const price = data.predicted_price;
+            const formattedPrice = price + " lakh";
+            document.getElementById('price').innerHTML = '<h2 style="background: ">' + formattedPrice + '</h2>';
+        });
+});
+
+</script>
+</body>
+</html>
