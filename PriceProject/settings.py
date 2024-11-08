@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-y9vuak6ji1(oo^a1ol5fo_xy^9i*z*zylpten93bzq==&%4lsp
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.vercel.app','*','priceprojet.onrender.com']
 
 ML_MODEL_DIR = os.path.join(BASE_DIR, 'ML_model')
 
@@ -50,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 
 ROOT_URLCONF = 'PriceProject.urls'
